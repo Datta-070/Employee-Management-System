@@ -1,5 +1,5 @@
 const form= document.getElementById("form");
-const recordscontainer= document.getElementById("records");
+const recordscontainer= document.getElementById("records-container");
 const createButton= document.querySelector("#form button");
 
 const employeesList=[];
@@ -8,10 +8,9 @@ let empid=1000;
 
 const onSubmitForm = (event) =>{
     event.preventDefault();
-     
     const employee = {
         name:form.name.value,
-        empid:++empid,
+        employeeid:++empid,
         salary:form.salary.value,
         team:form.team.value,
         role:form.role.value,
@@ -29,7 +28,7 @@ function deleteRecord(event){
     const currentEmployeeId = parseInt(deleteButton.getAttribute("data-empid"));
 
     for(let i=0;i<employeesList.length;i++){
-        if(employeesList[i].empid===currentEmployeeId){
+        if(employeesList[i].employeeid===currentEmployeeId){
             employeesList.splice(i,1);
             break;
         }
@@ -41,7 +40,7 @@ function editRecord(event){
     const currentEmployeeId = parseInt(editButton.getAttribute("data-empid"));
 
     for(let i=0;i<employeesList.length;i++){
-        if(currentEmployeeId===employeesList[i].empid){
+        if(currentEmployeeId===employeesList[i].employeeid){
             fillFormWithData(employeesList[i]);
             break;
         }
@@ -50,7 +49,7 @@ function editRecord(event){
 
 function fillFormWithData(employee){
     for(let key in employee){
-        if(key !== "empId"){
+        if(key !== "employeeid"){
         form[key].value=employee[key];
         }
     }
@@ -70,13 +69,13 @@ function addNewEmployeeRecord(employee){
     const editIcon=document.createElement("span");
     editIcon.className="material-icons icon";
     editIcon.innerText="edit";
-    editIcon.setAttribute("data-empid", employee.empid);
+    editIcon.setAttribute("data-empid", employee.employeeid);
     editIcon.addEventListener("click", editRecord)
 
     const deleteIcon=document.createElement("span");
     deleteIcon.className="material-icons icon";
     deleteIcon.innerText="delete";
-    deleteIcon.setAttribute("data-empid", employee.empid);
+    deleteIcon.setAttribute("data-empid", employee.employeeid);
     deleteIcon.addEventListener("click", deleteRecord);
 
     optionsCell.append(editIcon,deleteIcon);
@@ -86,5 +85,4 @@ function addNewEmployeeRecord(employee){
     //add newly created employee to global employees list.
     employeesList.push(employee);   
 }
-
 form.addEventListener("submit", onSubmitForm);

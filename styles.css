@@ -54,7 +54,7 @@ td, th{
     padding: 5px 10px;
 }
 table, th, td, tr{
-    border: 1px solid black;
+    border: 1px solid white;
 }
 tbody{
     color: white;
