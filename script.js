@@ -2,6 +2,8 @@ const form= document.getElementById("form");
 const recordscontainer= document.getElementById("records-container");
 const createButton= document.querySelector("#form button");
 
+let formState= "CREATE" ;
+
 const employeesList=[];
 
 let empid=1000;
@@ -16,11 +18,22 @@ const onSubmitForm = (event) =>{
         role:form.role.value,
         companyname:form.companyname.value
     }
+    if(formState === "CREATE"){
+        addNewEmployeeRecord(employee);
+    }
+    else if(formState === "UPDATE"){
+        formState = "CREATE";
+        createButton.innerText = "Create Employee";
+    }
     form.reset();
-    addNewEmployeeRecord(employee);
 }
 
-function deleteRecord(event){
+function deleteRecord(event){   
+
+    if(formState === "UPDATE"){
+        alert("Please update the record before deleting anything");
+        return;
+    }
     const deleteButton = event.target;
     const record = deleteButton.parentNode.parentNode;
     record.remove();
@@ -28,7 +41,7 @@ function deleteRecord(event){
     const currentEmployeeId = parseInt(deleteButton.getAttribute("data-empid"));
 
     for(let i=0;i<employeesList.length;i++){
-        if(employeesList[i].employeeid===currentEmployeeId){
+        if(employeesList[i].employeeid === currentEmployeeId){
             employeesList.splice(i,1);
             break;
         }
@@ -50,10 +63,11 @@ function editRecord(event){
 function fillFormWithData(employee){
     for(let key in employee){
         if(key !== "employeeid"){
-        form[key].value=employee[key];
+            form[key].value=employee[key];
         }
     }
     createButton.innerText="Update Employee";
+    formState= "UPDATE" ;
 }
 
 function addNewEmployeeRecord(employee){
@@ -79,7 +93,7 @@ function addNewEmployeeRecord(employee){
     deleteIcon.addEventListener("click", deleteRecord);
 
     optionsCell.append(editIcon,deleteIcon);
-    record.append(editIcon,deleteIcon);
+    record.appendChild(optionsCell);
 
     recordscontainer.appendChild(record);
     //add newly created employee to global employees list.
